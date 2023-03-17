@@ -37,11 +37,11 @@
 	width:25%;
 }
 
-.categorytogglelist button.active {
+.categorytogglelist button:focus {
 	opacity:1;
 }
 
-.categorytogglelist button.active a:after {
+.categorytogglelist button:focus a:after{
 	content: " ";
 	background: #000;
 	width: 100%;
