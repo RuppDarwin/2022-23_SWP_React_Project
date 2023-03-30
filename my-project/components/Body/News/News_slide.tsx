@@ -7,64 +7,63 @@ import News_3 from './News_Inhalt/News_3';
 import ArrowLeft from '@mui/icons-material/ArrowBackIosNew';
 import ArrowRight from '@mui/icons-material/ArrowForwardIos';
 
-const components = {
-    'News1': News_1,
-    'News2': News_2,
-    'News3': News_3,
-}
+var rotation_number = 0;
 
-export default function News_slide() {
+
+export default function News_slide(state:any) {
+    
     const[loadNews1, setloadNews1] = useState(false);
     const[loadNews2, setloadNews2] = useState(false);
     const[loadNews3, setloadNews3] = useState(false);
+    
 
-    function NewsRight(){
-        if(loadNews1 === true){
-            setloadNews1(!loadNews1);
-            setloadNews2(loadNews2);
-        }
-        else if(loadNews2 === true){
-            setloadNews2(!loadNews2);
-            setloadNews3(loadNews3);
-        }
-        else if(loadNews3 === true){
-            setloadNews3(!loadNews3);
-            setloadNews1(loadNews1);
-        }
-    }
+    state = {
+        categes: [
+        { cat_id: '0', cat_name: "News1", cat_function: () => setloadNews1(!loadNews1)},
+        { cat_id: '1', cat_name: "News2", cat_function: () => setloadNews2(!loadNews2)},
+        { cat_id: '2', cat_name: "News3", cat_function: () => setloadNews3(!loadNews3)},
+        ],
+        change: false,
+    };
+    
 
-    function NewsLeft(){
-        if(loadNews1 === true ){
-            setloadNews1(!loadNews1);
-            setloadNews3(loadNews3);
+    function NewsRotation(RotationDirection:string){
+        if(RotationDirection === "Left"){
+            //alert("Left")
+            if(rotation_number > 0){
+                rotation_number -= 1;
+            }else{
+                rotation_number = 2;
+            }
         }
-        else if(loadNews2 === true){
-            setloadNews2(!loadNews2);
-            setloadNews1(loadNews1);
+        if(RotationDirection === "Right"){
+            //alert("Right")
+            if(rotation_number < 2){
+                rotation_number += 1;
+            }else{
+                rotation_number = 0;
+            }
         }
-        else if(loadNews3 === true){
-            setloadNews3(!loadNews3);
-            setloadNews2(loadNews2);
-        }
+        return rotation_number;
     }
 
     return (
         <>    
             <div className="relative">
-
                 <div className="absolute left-4 top-0 bottom-0 flex flex-row items-center">
-                    <button onClick={() => NewsLeft()} className="bg-[#f5f4df] w-max p-2 rounded-lg opacity-40">
+                    <button onClick={() => NewsRotation("Left")} className="bg-[#f5f4df] w-max p-2 rounded-lg opacity-40">
                         <ArrowLeft/>
                     </button>
                 </div>
                 <div className="absolute right-4 top-0 bottom-0 flex flex-row items-center">
-                    <button onClick={() => NewsRight()} className="bg-[#f5f4df] w-max p-2 rounded-lg opacity-40">
+                    <button onClick={() => NewsRotation("Right")} className="bg-[#f5f4df] w-max p-2 rounded-lg opacity-40">
                         <ArrowRight/>
                     </button>
                 </div>
-                {!loadNews1 && <News_1/>}
-                {loadNews2 && <News_2/>}
-                {loadNews3 && <News_3/>}
+                {state.categes.map((item:any) => (
+                    <News_1 key={item.cat_id}/>
+                ))}
+
             </div>
         </>
     )
